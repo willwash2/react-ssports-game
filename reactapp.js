@@ -7,25 +7,21 @@ class Team extends React.Component {
             score: 0,
         };
 
-        this.shotSound = new Audio('./assets/audio/Swoosh.wav')
-        this.scoreSound = new Audio('./assets/audio/Swish.wav')
+        this.shotSound = new Audio('.sports/assets/audio/Swoosh.wav')
+        this.scoreSound = new Audio('.sports/assets/audio/Swish.wav')
 
     }
-
-
-
-
-
-
     shotHandler = () => {
         let score = this.state.score;
-
         this.shotSound.play()
 
         if (Math.random() > 0.5) {
             score += 1;
 
-            this.scoreSound.play()
+            setTimeout(() => {
+                this.scoreSound.play()
+            }, 100)
+
 
 
         }

@@ -5,8 +5,8 @@ class Team extends React.Component {
             shotsTaken: 0,
             score: 0,
         };
-        this.shotSound = new Audio('.sports/assets/audio/Swoosh.mp3');
         this.scoreSound = new Audio('.sports/assets/audio/Swish.mp3');
+        this.missSound = new Audio('.sports/assets/audio/Missed.mp3');
         this.name = props.name;
         this.logo = props.logo;
     }
@@ -14,11 +14,12 @@ class Team extends React.Component {
     shotEvent = (event) => {
         let score = this.state.score;
 
-        if (Math.floor(Math.random() * 3 >= 1)) {
+        if (Math.random() > 0.5) {
             score += 1;
-            this.shotSound.play();
-        } else {
+
             this.scoreSound.play();
+        } else {
+            this.missSound.play();
         }
         this.setState((state, props) => ({
             shotsTaken: state.shotsTaken + 1,

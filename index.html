@@ -32,7 +32,6 @@
         margin: 0 auto;
         width: 80%;
         background-color: slategray;
-        /* justify-items: center; */
         justify-content: center;
     }
 
@@ -66,29 +65,30 @@
 </style>
 
 
-<!-- include our JS+JSX for the React Appliccation -->
+
 <script type="text/babel">
-    // An App component under which all other components will be added
+
     class Team extends React.Component {
-        //constructor
+
         constructor(props) {
             super(props);
             this.state = {
                 shotsTaken: 0,
                 score: 0,
             };
-            this.missSound = new Audio("./sounds/miss.mp3");
-            this.goalSound = new Audio("./sounds/swish.mp3");
+            this.scoreSound = new Audio('./sports/assets/audio/Swish.mp3');
+            this.missSound = new Audio('./sports/assets/audio/Missed.mp3');
             this.name = props.name;
             this.logo = props.logo;
         }
-        //method area
+
         shotEvent = (event) => {
             let score = this.state.score;
 
-            if (Math.floor(Math.random() * 3 >= 1)) {
+            if (Math.random() > 0.5) {
                 score += 1;
-                this.goalSound.play();
+
+                this.scoreSound.play();
             } else {
                 this.missSound.play();
             }
@@ -98,7 +98,7 @@
             }));
         };
 
-        //render area
+
         render() {
             let shotPercentageStrong;
 
@@ -143,7 +143,7 @@
         return <Game venue="The Spectrum Center" />;
     }
 
-    // Render the App
+
     ReactDOM.render(<App />, document.getElementById("root"));
 </script>
 </body>

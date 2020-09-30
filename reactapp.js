@@ -1,70 +1,75 @@
 class Team extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            shots: 0,
+            shotsTaken: 0,
             score: 0,
         };
-
-        this.shotSound = new Audio('.sports/assets/audio/Swoosh.wav')
-        this.scoreSound = new Audio('.sports/assets/audio/Swish.wav')
-
+        this.shotSound = new Audio('.sports/assets/audio/Swoosh.mp3');
+        this.scoreSound = new Audio('.sports/assets/audio/Swish.mp3');
+        this.name = props.name;
+        this.logo = props.logo;
     }
-    shotHandler = () => {
+
+    shotEvent = (event) => {
         let score = this.state.score;
-        this.shotSound.play()
 
-        if (Math.random() > 0.5) {
+        if (Math.floor(Math.random() * 3 >= 1)) {
             score += 1;
-
-            setTimeout(() => {
-                this.scoreSound.play()
-            }, 100)
-
-
-
+            this.shotSound.play();
+        } else {
+            this.scoreSound.play();
         }
-
         this.setState((state, props) => ({
-            shots: state.shots + 1,
+            shotsTaken: state.shotsTaken + 1,
             score,
         }));
     };
 
-    render() {
-        return (
-            <div className="Team">
-                <h2>{this.props.name}</h2>
 
-                <div className="identity">
-                    <img src={this.props.logo} alt={this.props.name} />
-                </div>
-                <div>
-                    <strong>shots:</strong> {this.state.shots}
-                </div>
-                <div>
-                    <strong>score:</strong> {this.state.score}
-                </div>
-                <button onClick={this.shotHandler}>shoot!</button>
+    render() {
+        let shotPercentageStrong;
+
+        if (this.state.shotsTaken) {
+            const scorePercentage =
+                (this.state.score / this.state.shotsTaken) * 100;
+            shotPercentageStrong = (
+                <strong>Score Percentage {scorePercentage}%</strong>
+            );
+        }
+        return (
+            <div id="stats">
+                <h2>{this.name}</h2>
+                <img src={this.logo} alt={this.name} />
+                <br />
+                <strong>Shots Taken {this.state.shotsTaken}</strong>
+                <br />
+                <strong>Score {this.state.score}</strong>
+                <br />
+                {shotPercentageStrong}
+                <br />
+                <button onClick={this.shotEvent}>Shoot</button>
             </div>
         );
     }
 }
-function App(props) {
+
+function Game(props) {
     return (
-        <div className="App">
-            <div className="stats">
+        <div id="Scoreboard">
+            <h1>Welcome to {props.venue}</h1>
+            <div id="teams">
                 <Team name="NYC Spartan-Warriors" logo="./sports/assets/images/spartan-warriors.jpg" />
-
-                <div className="versus">
-                    <h1>VS</h1>
-                </div>
-
+                <h2>VS</h2>
                 <Team name="NJ Wolves" logo="./sports/assets/images/wolves.jpg" />
             </div>
         </div>
     );
 }
+
+function App(props) {
+    return <Game venue="The spectrum Center" />;
+}
+
 
 ReactDOM.render(<App />, document.getElementById("root"));

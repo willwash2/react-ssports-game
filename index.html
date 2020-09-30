@@ -20,3 +20,132 @@
 </body>
 
 </html>
+
+<div id="root"></div>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    #root {
+        display: flex;
+        margin: 0 auto;
+        width: 80%;
+        background-color: slategray;
+        /* justify-items: center; */
+        justify-content: center;
+    }
+
+    #teams {
+        display: flex;
+        align-items: center;
+    }
+
+    #Scoreboard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #Scoreboard h2 {
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+
+    #stats {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    img {
+        height: 250px;
+        width: 250px;
+    }
+</style>
+
+
+<!-- include our JS+JSX for the React Appliccation -->
+<script type="text/babel">
+    // An App component under which all other components will be added
+    class Team extends React.Component {
+        //constructor
+        constructor(props) {
+            super(props);
+            this.state = {
+                shotsTaken: 0,
+                score: 0,
+            };
+            this.missSound = new Audio("./sounds/miss.mp3");
+            this.goalSound = new Audio("./sounds/swish.mp3");
+            this.name = props.name;
+            this.logo = props.logo;
+        }
+        //method area
+        shotEvent = (event) => {
+            let score = this.state.score;
+
+            if (Math.floor(Math.random() * 3 >= 1)) {
+                score += 1;
+                this.goalSound.play();
+            } else {
+                this.missSound.play();
+            }
+            this.setState((state, props) => ({
+                shotsTaken: state.shotsTaken + 1,
+                score,
+            }));
+        };
+
+        //render area
+        render() {
+            let shotPercentageStrong;
+
+            if (this.state.shotsTaken) {
+                const scorePercentage =
+                    (this.state.score / this.state.shotsTaken) * 100;
+                shotPercentageStrong = (
+                    <strong>Score Percentage {scorePercentage}%</strong>
+                );
+            }
+            return (
+                <div id="stats">
+                    <h2>{this.name}</h2>
+                    <img src={this.logo} alt={this.name} />
+                    <br />
+                    <strong>Shots Taken {this.state.shotsTaken}</strong>
+                    <br />
+                    <strong>Score {this.state.score}</strong>
+                    <br />
+                    {shotPercentageStrong}
+                    <br />
+                    <button onClick={this.shotEvent}>Shoot</button>
+                </div>
+            );
+        }
+    }
+
+    function Game(props) {
+        return (
+            <div id="Scoreboard">
+                <h1>Welcome to {props.venue}</h1>
+                <div id="teams">
+                    <Team name="NYC Spartan-Warriors" logo="./sports/assets/images/spartan-warriors.jpg" />
+                    <h2>VS</h2>
+                    <Team name="NJ Wolves" logo="./sports/assets/images/wolves.jpg" />
+                </div>
+            </div>
+        );
+    }
+
+    function App(props) {
+        return <Game venue="The Spectrum Center" />;
+    }
+
+    // Render the App
+    ReactDOM.render(<App />, document.getElementById("root"));
+</script>
+</body>
+
+</html>
